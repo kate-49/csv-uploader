@@ -10,13 +10,14 @@ async function SubmitForm($router, $fileName, $fileContent) {
         console.log($fileName)
         console.log("0fileContent")
         console.log($fileContent)
+        const contentAsJson = JSON.stringify($fileContent);
 
         const res = await fetch("http://localhost:3000/api/documents", {
             method: "POST",
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({ name: $fileName, content: $fileContent }),
+            body: JSON.stringify({ name: $fileName, content: contentAsJson }),
         });
 
         if (res.ok) {
@@ -48,9 +49,11 @@ export default function AddDocument() {
         };
 
         reader.onload = () => {
-            console.log('on load function')
-            console.log(reader.result);
-            return SubmitForm(router, name, reader.result);
+            const fileDataAsString = reader.result;
+            const fileDataAsArray = fileDataAsString.split('\r');
+            console.log('array');
+            console.log(fileDataAsArray);
+            return SubmitForm(router, name, fileDataAsArray);
         };
 
         console.log('read')
