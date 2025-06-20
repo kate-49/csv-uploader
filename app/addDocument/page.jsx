@@ -15,6 +15,7 @@ export default function AddDocument() {
             header: true,
             skipEmptyLines: true,
             complete: function (results) {
+                console.log("Papa")
                 console.log(results.data)
             },
         });
@@ -24,12 +25,19 @@ export default function AddDocument() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
         // formData("avatar", fileInput.current.files[0]);
         // formData.set("fileName", fileName.current.value);
 
+        const form = e.target;
+        const formData = new FormData(form);
+        console.log('formdata')
+        console.log(formData)
+        const formJson = Object.fromEntries(formData.entries());
+        console.log(formJson)
+
         const reader = new FileReader();
-        const file = fileInput.current.files[0];
+        const file = fileInput.current.files[0]
+        const file2 = formData.get('file');
 
 
 
@@ -37,12 +45,14 @@ export default function AddDocument() {
             const text = e.target.result
             console.log("text")
             console.log(text)
-            reader.readAsText(file);
+            const data = Papa.parse(text).toString()
+            console.log(data)
+            // reader.readAsText(file);
             // console.log(reader.read(file));
         }
 
-        console.log("document contents")
-        console.log(FileReader.readAsText(fileInput.current.files[0]))
+        // console.log("document contents")
+        // console.log(FileReader.readAsText(fileInput.current.files[0]))
 
         try {
             const res = await fetch("http://localhost:3000/api/documents", {
