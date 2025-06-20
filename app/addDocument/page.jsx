@@ -16,7 +16,7 @@ async function SubmitForm($router, $fileName, $fileContent) {
             headers: {
                 "Content-type": "application/json",
             },
-            body: JSON.stringify({ $fileName, $fileContent }),
+            body: JSON.stringify({ name: $fileName, content: $fileContent }),
         });
 
         if (res.ok) {
